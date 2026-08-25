@@ -231,12 +231,46 @@ python app.py
 Then visit:
 
 ```text
-Authorization: Bearer <access_token>
+http://127.0.0.1:5000
+```
 
-```markdown
-## Security
+---
 
-- Passwords are hashed using Bcrypt before being stored
-- Protected web routes require an authenticated session
-- Protected API routes require a valid JWT
-- Sensitive credentials and secret keys are stored in environment variables
+## 🧪 API Testing
+
+The API endpoints were tested using **Postman**.
+
+Test scenarios include:
+
+- Successful user registration
+- Duplicate account rejection
+- Successful and unsuccessful login
+- JWT generation after valid login
+- Accessing `/api/profile` without a JWT
+- Accessing `/api/profile` with a valid Bearer token
+
+---
+
+## 💡 What I Learned
+
+Building AccountHub provided hands-on experience with:
+
+- Flask backend development
+- PostgreSQL integration
+- SQLAlchemy ORM
+- Secure password hashing
+- Session-based authentication
+- JWT-based authentication
+- REST API design
+- HTTP status codes
+- API testing with Postman
+- Environment variable management
+- Git and GitHub version control
+
+---
+
+## 👤 Author
+
+**Zahra Aliabbas**
+
+Computer Engineering Student
