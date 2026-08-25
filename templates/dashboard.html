@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+    <h1>Welcome, {{ current_user.username }}!</h1>
+
+    <p>You are signed in to your AccountHub account.</p>
+
+    <p>
+        <strong>Email:</strong>
+        {{ current_user.email }}
+    </p>
+</div>
+
+{% endblock %}
