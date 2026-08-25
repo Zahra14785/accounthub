@@ -69,3 +69,13 @@ Authorization: Bearer <access_token>
 - Protected web routes require an authenticated session
 - Protected API routes require a valid JWT
 - Sensitive credentials and secret keys are stored in environment variables
+
+AccountHub
+├── Short description
+├── Features
+├── Tech Stack
+├── Authentication
+│   ├── Web Authentication
+│   └── API Authentication
+├── API Endpoints
+└── Security
