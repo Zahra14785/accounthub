@@ -272,5 +272,3 @@ Building AccountHub provided hands-on experience with:
 ## 👤 Author
 
 **Zahra Aliabbas**
-
-Computer Engineering Student
