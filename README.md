@@ -1,63 +1,234 @@
-# AccountHub
+# 🔐 AccountHub — Flask Authentication System
 
-AccountHub is a Flask-based authentication system that implements secure user registration, login, session management, and JWT-based API authentication. User data is stored in a PostgreSQL database, with passwords securely hashed using Bcrypt.
+AccountHub is a secure authentication system built with **Flask and PostgreSQL**.  
+It supports traditional session-based web authentication as well as **JWT-based REST API authentication**, with secure password hashing and protected routes.
 
-## Features
+---
 
-- User registration with form validation
-- Secure login and logout
-- Password hashing using Bcrypt
-- PostgreSQL database integration
-- Session-based authentication using Flask-Login
-- Protected dashboard accessible only to authenticated users
-- REST API for user registration and login
-- JWT-based stateless authentication
-- JWT-protected API endpoints
-- Duplicate username and email prevention
-- Environment variables for sensitive configuration
+## 🚀 Features
 
-## Tech Stack
+- **User Registration**
+  - Username, email, password and confirmation validation
+  - Duplicate username and email prevention
 
-- Python
-- Flask
-- PostgreSQL
-- SQLAlchemy
-- Flask-SQLAlchemy
-- Flask-Login
-- Flask-Bcrypt
-- Flask-JWT-Extended
-- Flask-WTF
-- HTML
-- CSS
-- Postman
+- **Secure Password Storage**
+  - Passwords are hashed using Bcrypt
+  - Plain-text passwords are never stored in the database
 
-## Authentication
+- **Session-Based Authentication**
+  - Login and logout using Flask-Login
+  - Protected dashboard accessible only to authenticated users
 
-AccountHub supports two authentication approaches.
+- **JWT Authentication**
+  - JWT access tokens generated after successful API login
+  - Protected REST API endpoints using Bearer tokens
 
-### Web Authentication
+- **PostgreSQL Integration**
+  - User account data stored in PostgreSQL
+  - Database interaction handled using SQLAlchemy ORM
 
-The web interface uses Flask-Login for session-based authentication.
+- **Environment-Based Configuration**
+  - Database credentials and secret keys stored outside the source code using environment variables
 
-After a user logs in successfully, a session is created and protected pages such as the dashboard can only be accessed by authenticated users.
+---
 
-### API Authentication
+## 🛠️ Tech Stack
 
-The REST API uses JSON Web Tokens (JWT) for stateless authentication.
+| Technology | Purpose |
+|---|---|
+| Python | Backend programming language |
+| Flask | Web framework |
+| PostgreSQL | Relational database |
+| SQLAlchemy | ORM and database interaction |
+| Flask-Login | Session-based authentication |
+| Flask-Bcrypt | Password hashing |
+| Flask-JWT-Extended | JWT authentication |
+| Flask-WTF | Form handling and validation |
+| HTML / CSS | Web interface |
+| Postman | REST API testing |
+| Git / GitHub | Version control |
 
-After successful API login, the server returns an access token. The token can then be supplied as a Bearer token when accessing protected API endpoints.
+---
 
-## API Endpoints
+## 🔐 Authentication Overview
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/register` | Register a new user |
-| POST | `/api/login` | Authenticate a user and receive a JWT |
-| GET | `/api/profile` | Retrieve the authenticated user's profile |
+AccountHub implements **two authentication approaches**.
 
-The `/api/profile` endpoint requires a valid JWT access token.
+### 🌐 Web Authentication
 
-Example authorization header:
+The browser-based interface uses **Flask-Login** for session authentication.
+
+```text
+User enters credentials
+        ↓
+Account retrieved from PostgreSQL
+        ↓
+Bcrypt verifies password
+        ↓
+Flask-Login creates authenticated session
+        ↓
+User gains access to protected dashboard
+```
+
+The `/dashboard` route is protected using `@login_required`.
+
+### 🔑 JWT API Authentication
+
+The REST API uses **JSON Web Tokens (JWT)** for stateless authentication.
+
+```text
+Client sends email + password
+        ↓
+Credentials are verified
+        ↓
+Server generates JWT access token
+        ↓
+Client sends token with protected requests
+        ↓
+Server validates token
+        ↓
+Protected resource is returned
+```
+
+The `/api/profile` endpoint is protected using `@jwt_required()`.
+
+---
+
+## 🌐 API Endpoints
+
+| Method | Endpoint | Description | Authentication |
+|---|---|---|---|
+| POST | `/api/register` | Register a new user | No |
+| POST | `/api/login` | Login and receive JWT | No |
+| GET | `/api/profile` | Retrieve current user's profile | JWT Required |
+
+### Example API Login
+
+**Request**
+
+```json
+{
+    "email": "user@example.com",
+    "password": "your-password"
+}
+```
+
+**Response**
+
+```json
+{
+    "access_token": "<JWT_ACCESS_TOKEN>"
+}
+```
+
+The token can then be sent to protected endpoints using:
+
+```text
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+---
+
+## 🛡️ Security Features
+
+- Passwords hashed using **Bcrypt**
+- No plain-text password storage
+- Protected web routes using `@login_required`
+- Protected API routes using `@jwt_required()`
+- Duplicate username and email detection
+- JWT signing key stored as an environment variable
+- PostgreSQL credentials stored outside source code
+- `.env` excluded from Git version control
+
+---
+
+## 📊 Database Model
+
+### User
+
+| Field | Type | Constraint |
+|---|---|---|
+| id | Integer | Primary Key |
+| username | String(20) | Unique, Not Null |
+| email | String(120) | Unique, Not Null |
+| password | String(255) | Not Null |
+
+Passwords stored in the `password` column contain **Bcrypt hashes**, not the original passwords.
+
+---
+
+## 📁 Project Structure
+
+```text
+📦 AccountHub
+│
+├── static/
+│   └── style.css
+│
+├── templates/
+│   ├── base.html
+│   ├── dashboard.html
+│   ├── home.html
+│   ├── login.html
+│   └── register.html
+│
+├── app.py
+├── forms.py
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+> `.env` is intentionally excluded from the repository because it contains sensitive configuration values.
+
+---
+
+## ⚙️ Running Locally
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repository-url>
+cd accounthub
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the environment
+
+On Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Configure environment variables
+
+Create a `.env` file containing:
+
+```env
+SECRET_KEY=your-secret-key
+JWT_SECRET_KEY=your-jwt-secret-key
+DATABASE_URL=your-postgresql-database-url
+```
+
+### 6. Run AccountHub
+
+```bash
+python app.py
+```
+
+Then visit:
 
 ```text
 Authorization: Bearer <access_token>
@@ -69,13 +240,3 @@ Authorization: Bearer <access_token>
 - Protected web routes require an authenticated session
 - Protected API routes require a valid JWT
 - Sensitive credentials and secret keys are stored in environment variables
-
-AccountHub
-├── Short description
-├── Features
-├── Tech Stack
-├── Authentication
-│   ├── Web Authentication
-│   └── API Authentication
-├── API Endpoints
-└── Security
